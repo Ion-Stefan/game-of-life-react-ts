@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 type GridType = number[][];
 
 export const App = () => {
-  const [numRow, setNumRow] = useState(5);
-  const [numCol, setNumCol] = useState(5);
-  const [boxSize, setBoxSize] = useState(80);
+  const [numRow, setNumRow] = useState(20);
+  const [numCol, setNumCol] = useState(20);
+  const [boxSize, setBoxSize] = useState(60);
 
   const unselectedClass =
     "`border-solid bg-emerald-500 border-2 border-black text-center`";
@@ -39,21 +39,97 @@ export const App = () => {
     });
   };
 
+  const calculateNextGeneration = () => {
+    setGrid((prevGrid) => {
+      return prevGrid.map((row, rowIndex) =>
+        row.map((cell, colIndex) => {
+          const neighbors = countAliveNeighbors(prevGrid, rowIndex, colIndex);
+          // Apply Conway's Game of Life rules
+          if (cell === 1 && (neighbors < 2 || neighbors > 3)) {
+            return 0; // Cell dies due to underpopulation or overpopulation
+          } else if (cell === 0 && neighbors === 3) {
+            return 1; // Cell becomes alive due to reproduction
+          } else {
+            return cell; // Cell stays the same
+          }
+        }),
+      );
+    });
+  };
+
+  const countAliveNeighbors = (
+    currentGrid: GridType,
+    row: number,
+    col: number,
+  ) => {
+    const neighborsOffsets = [
+      [-1, -1],
+      [-1, 0],
+      [-1, 1],
+      [0, -1],
+      [0, 1],
+      [1, -1],
+      [1, 0],
+      [1, 1],
+    ];
+
+    return neighborsOffsets.reduce((count, [offsetRow, offsetCol]) => {
+      const newRow = row + offsetRow;
+      const newCol = col + offsetCol;
+
+      if (
+        newRow >= 0 &&
+        newRow < currentGrid.length &&
+        newCol >= 0 &&
+        newCol < currentGrid[0].length
+      ) {
+        count += currentGrid[newRow][newCol];
+      }
+
+      return count;
+    }, 0);
+  };
+
+  const [generationTime, setTime] = useState<number>(1000);
+
+  const handleStartButtonClick = (time: number) => {
+    time = generationTime;
+    let intervalId = setInterval(() => {
+      calculateNextGeneration();
+      setTime(generationTime);
+      time = generationTime;
+    }, time); // Adjust the interval as needed
+
+    return intervalId;
+  };
+
+  const handleStopButtonClick = () => {
+    setTime(900000);
+  };
+
   return (
     <>
-      <button
-        onClick={() => console.log(grid)}
-        className="text-4xl bg-red-500 p-5 text-white"
-      >
-        DEBUG!
-      </button>
-
       <button
         onClick={() => setGrid(updateGrid())}
         className="text-4xl bg-blue-500 ml-10 p-5 text-white"
       >
         RESET
       </button>
+
+      <button
+        onClick={() => handleStartButtonClick(generationTime)}
+        className="text-4xl bg-red-500 ml-5 p-5 text-white"
+      >
+        START
+      </button>
+
+      <button
+        onClick={() => handleStopButtonClick()}
+        className="text-4xl bg-red-500 ml-5 p-5 text-white"
+      >
+        STOP
+      </button>
+
       <div className=" h-[85vh] flex justify-center items-center">
         {/* Display the grid using the map function */}
         {grid.map((row, rowIndex) => (
