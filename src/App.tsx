@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 type GridType = number[][];
 
 export const App = () => {
-  const [numRow, setNumRow] = useState(20);
-  const [numCol, setNumCol] = useState(20);
-  const [boxSize, setBoxSize] = useState(60);
+  const [numRow, setNumRow] = useState(25);
+  const [numCol, setNumCol] = useState(25);
+  const [boxSize, setBoxSize] = useState(40);
+  const [generationTime, setTime] = useState<number>(1000);
 
   const unselectedClass =
     "`border-solid bg-emerald-500 border-2 border-black text-center`";
@@ -18,6 +19,13 @@ export const App = () => {
     return initialGrid;
   });
 
+  function updateRandomGrid() {
+    const initialGrid = Array.from({ length: numRow }, () =>
+      Array.from({ length: numCol }, () => Math.round(Math.random())),
+    );
+    return initialGrid;
+  }
+
   function updateGrid() {
     const initialGrid = Array.from({ length: numRow }, () =>
       Array.from({ length: numCol }, () => 0),
@@ -27,7 +35,7 @@ export const App = () => {
 
   useEffect(() => {
     setGrid(updateGrid());
-  }, [numRow, numCol]);
+  }, [numRow, numCol, generationTime]);
 
   const updateCellValue = (row: number, col: number, cell: number) => {
     setGrid((prevGrid) => {
@@ -90,21 +98,12 @@ export const App = () => {
     }, 0);
   };
 
-  const [generationTime, setTime] = useState<number>(1000);
-
-  const handleStartButtonClick = (time: number) => {
-    time = generationTime;
+  const handleStartButtonClick = () => {
     let intervalId = setInterval(() => {
       calculateNextGeneration();
-      setTime(generationTime);
-      time = generationTime;
-    }, time); // Adjust the interval as needed
+    }, generationTime); // Adjust the interval as needed
 
     return intervalId;
-  };
-
-  const handleStopButtonClick = () => {
-    setTime(900000);
   };
 
   return (
@@ -117,17 +116,24 @@ export const App = () => {
       </button>
 
       <button
-        onClick={() => handleStartButtonClick(generationTime)}
-        className="text-4xl bg-red-500 ml-5 p-5 text-white"
+        onClick={() => setGrid(updateRandomGrid())}
+        className="text-4xl bg-blue-500 ml-10 p-5 text-white"
       >
-        START
+        RANDOMIZE GRID
       </button>
 
       <button
-        onClick={() => handleStopButtonClick()}
+        onClick={() => handleStartButtonClick()}
         className="text-4xl bg-red-500 ml-5 p-5 text-white"
       >
-        STOP
+        ENDLESS MODE
+      </button>
+
+      <button
+        onClick={() => calculateNextGeneration()}
+        className="text-4xl bg-red-500 ml-5 p-5 text-white"
+      >
+        NEXT GENERATION
       </button>
 
       <div className=" h-[85vh] flex justify-center items-center">
@@ -142,9 +148,10 @@ export const App = () => {
                 onClick={() => updateCellValue(rowIndex, colIndex, cell)}
               >
                 {/* Display the value of each cell */}
-                {cell}
+                {/* {cell} */}
                 <br />
-                {/* Display the indices */}[ {rowIndex}, {colIndex} ]
+                {/* Display the indices */}
+                {/* [ {rowIndex}, {colIndex} ] */}
               </div>
             ))}
           </div>
