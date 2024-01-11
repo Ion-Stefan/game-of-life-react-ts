@@ -3,15 +3,19 @@ import { useEffect, useState } from "react";
 type GridType = number[][];
 
 export const App = () => {
-  const [numRow, setNumRow] = useState(25);
-  const [numCol, setNumCol] = useState(25);
-  const [boxSize, setBoxSize] = useState(40);
+  const [numRow, setNumRow] = useState(50);
+  const [numCol, setNumCol] = useState(50);
+  const [boxSize, setBoxSize] = useState(25);
   const [generationTime, setTime] = useState<number>(1000);
+  const [generations, setGenerations] = useState<number>(0);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [emptyGrid, setEmptyGrid] = useState<GridType>([]);
 
   const unselectedClass =
     "`border-solid bg-emerald-500 border-2 border-black text-center`";
   const selectedClass =
     "`border-solid bg-red-500 border-2 border-black text-center`";
+
   const [grid, setGrid] = useState<GridType>(() => {
     const initialGrid = Array.from({ length: numRow }, () =>
       Array.from({ length: numCol }, () => 0),
@@ -20,17 +24,26 @@ export const App = () => {
   });
 
   function updateRandomGrid() {
+    if (isRunning) return grid;
     const initialGrid = Array.from({ length: numRow }, () =>
       Array.from({ length: numCol }, () => Math.round(Math.random())),
     );
+    setGenerations(0);
     return initialGrid;
   }
 
   function updateGrid() {
+    if (isRunning) return grid;
     const initialGrid = Array.from({ length: numRow }, () =>
       Array.from({ length: numCol }, () => 0),
     );
+    setGenerations(0);
+    setEmptyGrid(initialGrid);
     return initialGrid;
+  }
+
+  function resetGame() {
+    window.location.reload();
   }
 
   useEffect(() => {
@@ -49,10 +62,12 @@ export const App = () => {
 
   const calculateNextGeneration = () => {
     setGrid((prevGrid) => {
+      if (grid === emptyGrid || isRunning) return grid;
+      setGenerations((prevGenerations) => prevGenerations + 1);
       return prevGrid.map((row, rowIndex) =>
         row.map((cell, colIndex) => {
           const neighbors = countAliveNeighbors(prevGrid, rowIndex, colIndex);
-          // Apply Conway's Game of Life rules
+          // Game rules
           if (cell === 1 && (neighbors < 2 || neighbors > 3)) {
             return 0; // Cell dies due to underpopulation or overpopulation
           } else if (cell === 0 && neighbors === 3) {
@@ -99,6 +114,12 @@ export const App = () => {
   };
 
   const handleStartButtonClick = () => {
+    if (grid !== emptyGrid) {
+      setIsRunning(true);
+    } else {
+      return grid;
+    }
+
     let intervalId = setInterval(() => {
       calculateNextGeneration();
     }, generationTime); // Adjust the interval as needed
@@ -109,7 +130,7 @@ export const App = () => {
   return (
     <>
       <button
-        onClick={() => setGrid(updateGrid())}
+        onClick={() => resetGame()}
         className="text-4xl bg-blue-500 ml-10 p-5 text-white"
       >
         RESET
@@ -120,6 +141,13 @@ export const App = () => {
         className="text-4xl bg-blue-500 ml-10 p-5 text-white"
       >
         RANDOMIZE GRID
+      </button>
+
+      <button
+        onClick={() => setGrid(updateGrid())}
+        className="text-4xl bg-blue-500 ml-10 p-5 text-white"
+      >
+        CLEAR GRID
       </button>
 
       <button
@@ -135,6 +163,8 @@ export const App = () => {
       >
         NEXT GENERATION
       </button>
+
+      <p className="text-4xl text-center mt-10">Generations: {generations}</p>
 
       <div className=" h-[85vh] flex justify-center items-center">
         {/* Display the grid using the map function */}
