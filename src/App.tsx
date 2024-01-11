@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 type GridType = number[][];
 
 export const App = () => {
-  const [numRow, setNumRow] = useState(50);
-  const [numCol, setNumCol] = useState(50);
+  const [numRow, setNumRow] = useState(35);
+  const [numCol, setNumCol] = useState(35);
   const [boxSize, setBoxSize] = useState(25);
-  const [generationTime, setTime] = useState<number>(1000);
+  const [generationTime, setTime] = useState<number>(750);
   const [generations, setGenerations] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [emptyGrid, setEmptyGrid] = useState<GridType>([]);
@@ -44,6 +44,7 @@ export const App = () => {
 
   function resetGame() {
     window.location.reload();
+    console.log("reseted");
   }
 
   useEffect(() => {
@@ -129,44 +130,84 @@ export const App = () => {
 
   return (
     <>
-      <button
-        onClick={() => resetGame()}
-        className="text-4xl bg-blue-500 ml-10 p-5 text-white"
-      >
-        RESET
-      </button>
+      <div className="flex items-center justify-center">
+        <button
+          onClick={() => resetGame()}
+          className="text-2xl bg-blue-500 m-5 p-5 text-white"
+        >
+          RESET
+        </button>
 
-      <button
-        onClick={() => setGrid(updateRandomGrid())}
-        className="text-4xl bg-blue-500 ml-10 p-5 text-white"
-      >
-        RANDOMIZE GRID
-      </button>
+        <button
+          onClick={() => setGrid(updateRandomGrid())}
+          className="text-2xl bg-blue-500 m-5 p-5 text-white"
+        >
+          RANDOMIZE GRID
+        </button>
 
-      <button
-        onClick={() => setGrid(updateGrid())}
-        className="text-4xl bg-blue-500 ml-10 p-5 text-white"
-      >
-        CLEAR GRID
-      </button>
+        <button
+          onClick={() => handleStartButtonClick()}
+          className="text-2xl bg-red-500 m-5 p-5 text-white"
+        >
+          ENDLESS MODE
+        </button>
 
-      <button
-        onClick={() => handleStartButtonClick()}
-        className="text-4xl bg-red-500 ml-5 p-5 text-white"
-      >
-        ENDLESS MODE
-      </button>
+        <button
+          onClick={() => calculateNextGeneration()}
+          className="text-2xl bg-red-500 m-5 p-5 text-white"
+        >
+          NEXT GENERATION
+        </button>
+      </div>
 
-      <button
-        onClick={() => calculateNextGeneration()}
-        className="text-4xl bg-red-500 ml-5 p-5 text-white"
-      >
-        NEXT GENERATION
-      </button>
+      <div className="flex flex-col items-start ml-16">
+        <div className="flex items-center justify-center">
+          <p className="text-2xl font-bold text-gray-900 mb-5">
+            Box size in pixels:
+          </p>
+          <input
+            className="border-2 ml-2 mb-4 border-black rounded-lg "
+            name="boxSize"
+            value={boxSize}
+            onChange={({ target }) => setBoxSize(target.value)}
+          />
+        </div>
 
-      <p className="text-4xl text-center mt-10">Generations: {generations}</p>
+        <div className="flex items-center justify-center">
+          <p className="text-2xl font-bold text-gray-900 mb-5">Rows:</p>
+          <input
+            className="border-2 ml-2 mb-4 border-black rounded-lg "
+            name="boxSize"
+            value={numRow}
+            onChange={({ target }) => setNumRow(target.value)}
+          />
+        </div>
 
-      <div className=" h-[85vh] flex justify-center items-center">
+        <div className="flex items-center justify-center">
+          <p className="text-2xl font-bold text-gray-900 mb-5">Colums:</p>
+          <input
+            className="border-2 ml-2 mb-4 border-black rounded-lg "
+            name="boxSize"
+            value={numCol}
+            onChange={({ target }) => setNumCol(target.value)}
+          />
+        </div>
+
+        <div className="flex items-center justify-center">
+          <p className="text-2xl font-bold text-gray-900 mb-5">
+            Generation time:
+          </p>
+          <input
+            className="border-2 ml-2 mb-4 border-black rounded-lg "
+            name="boxSize"
+            value={generationTime}
+            onChange={({ target }) => setTime(target.value)}
+          />
+        </div>
+      </div>
+      <p className="text-2xl text-center">Generations: {generations}</p>
+
+      <div className=" flex justify-center items-start py-10">
         {/* Display the grid using the map function */}
         {grid.map((row, rowIndex) => (
           <div key={rowIndex} className="">
