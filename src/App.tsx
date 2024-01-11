@@ -169,7 +169,7 @@ export const App = () => {
             className="border-2 ml-2 mb-4 border-black rounded-lg "
             name="boxSize"
             value={boxSize}
-            onChange={({ target }) => setBoxSize(target.value)}
+            onChange={({ target }) => setBoxSize(Number(target.value))}
           />
         </div>
 
@@ -179,7 +179,7 @@ export const App = () => {
             className="border-2 ml-2 mb-4 border-black rounded-lg "
             name="boxSize"
             value={numRow}
-            onChange={({ target }) => setNumRow(target.value)}
+            onChange={({ target }) => setNumRow(Number(target.value))}
           />
         </div>
 
@@ -189,7 +189,7 @@ export const App = () => {
             className="border-2 ml-2 mb-4 border-black rounded-lg "
             name="boxSize"
             value={numCol}
-            onChange={({ target }) => setNumCol(target.value)}
+            onChange={({ target }) => setNumCol(Number(target.value))}
           />
         </div>
 
@@ -201,7 +201,7 @@ export const App = () => {
             className="border-2 ml-2 mb-4 border-black rounded-lg "
             name="boxSize"
             value={generationTime}
-            onChange={({ target }) => setTime(target.value)}
+            onChange={({ target }) => setTime(Number(target.value))}
           />
         </div>
       </div>
