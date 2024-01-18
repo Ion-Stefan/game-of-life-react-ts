@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
-
-type GridType = number[][];
+import { useGridStore } from "./store";
+import {Options} from "./components/Options";
+import { MainGrid } from "./components/MainGrid";
+export type GridType = number[][];
 
 export const App = () => {
-  const [numRow, setNumRow] = useState(35);
-  const [numCol, setNumCol] = useState(35);
-  const [boxSize, setBoxSize] = useState(25);
-  const [generationTime, setTime] = useState<number>(750);
-  const [generations, setGenerations] = useState<number>(0);
+  const numRow: number = useGridStore((state) => state.numRow);
+  const numCol: number = useGridStore((state) => state.numCol);
+  const generationTime: number = useGridStore((state) => state.generationTime);
+  const generations: number = useGridStore((state) => state.generations);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [emptyGrid, setEmptyGrid] = useState<GridType>([]);
 
-  const unselectedClass =
-    "`border-solid bg-emerald-500 border-2 border-black text-center`";
-  const selectedClass =
-    "`border-solid bg-red-500 border-2 border-black text-center`";
+  const setGenerations = useGridStore((state) => state.setGenerations);
+  const incrementGenerations = useGridStore(
+    (state) => state.incrementGenerations,
+  );
+
 
   const [grid, setGrid] = useState<GridType>(() => {
     const initialGrid = Array.from({ length: numRow }, () =>
@@ -49,7 +51,7 @@ export const App = () => {
 
   useEffect(() => {
     setGrid(updateGrid());
-  }, [numRow, numCol, generationTime]);
+  }, [numRow, numCol]);
 
   const updateCellValue = (row: number, col: number, cell: number) => {
     setGrid((prevGrid) => {
@@ -64,7 +66,7 @@ export const App = () => {
   const calculateNextGeneration = () => {
     setGrid((prevGrid) => {
       if (grid === emptyGrid || isRunning) return grid;
-      setGenerations((prevGenerations) => prevGenerations + 1);
+      incrementGenerations(generations);
       return prevGrid.map((row, rowIndex) =>
         row.map((cell, colIndex) => {
           const neighbors = countAliveNeighbors(prevGrid, rowIndex, colIndex);
@@ -121,11 +123,9 @@ export const App = () => {
       return grid;
     }
 
-    let intervalId = setInterval(() => {
+    setInterval(() => {
       calculateNextGeneration();
     }, generationTime); // Adjust the interval as needed
-
-    return intervalId;
   };
 
   return (
@@ -159,75 +159,9 @@ export const App = () => {
           NEXT GENERATION
         </button>
       </div>
-
-      <div className="flex flex-col items-start ml-16">
-        <div className="flex items-center justify-center">
-          <p className="text-2xl font-bold text-gray-900 mb-5">
-            Box size in pixels:
-          </p>
-          <input
-            className="border-2 ml-2 mb-4 border-black rounded-lg "
-            name="boxSize"
-            value={boxSize}
-            onChange={({ target }) => setBoxSize(Number(target.value))}
-          />
-        </div>
-
-        <div className="flex items-center justify-center">
-          <p className="text-2xl font-bold text-gray-900 mb-5">Rows:</p>
-          <input
-            className="border-2 ml-2 mb-4 border-black rounded-lg "
-            name="boxSize"
-            value={numRow}
-            onChange={({ target }) => setNumRow(Number(target.value))}
-          />
-        </div>
-
-        <div className="flex items-center justify-center">
-          <p className="text-2xl font-bold text-gray-900 mb-5">Colums:</p>
-          <input
-            className="border-2 ml-2 mb-4 border-black rounded-lg "
-            name="boxSize"
-            value={numCol}
-            onChange={({ target }) => setNumCol(Number(target.value))}
-          />
-        </div>
-
-        <div className="flex items-center justify-center">
-          <p className="text-2xl font-bold text-gray-900 mb-5">
-            Generation time:
-          </p>
-          <input
-            className="border-2 ml-2 mb-4 border-black rounded-lg "
-            name="boxSize"
-            value={generationTime}
-            onChange={({ target }) => setTime(Number(target.value))}
-          />
-        </div>
-      </div>
+      <Options/>
       <p className="text-2xl text-center">Generations: {generations}</p>
-
-      <div className=" flex justify-center items-start py-10">
-        {/* Display the grid using the map function */}
-        {grid.map((row, rowIndex) => (
-          <div key={rowIndex} className="">
-            {row.map((cell, colIndex) => (
-              <div
-                key={colIndex}
-                style={{ width: `${boxSize}px`, height: `${boxSize}px` }}
-                className={cell === 1 ? selectedClass : unselectedClass}
-                onClick={() => updateCellValue(rowIndex, colIndex, cell)}
-              >
-                {/* Display the value of each cell */}
-                {/* {cell} */}
-                <br />
-                {/* Display the indices */}
-                {/* [ {rowIndex}, {colIndex} ] */}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
+      <MainGrid grid={grid} updateCellValue={updateCellValue} />
     </>
   );
 };
