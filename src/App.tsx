@@ -43,6 +43,7 @@ export const App = () => {
     setEmptyGrid(initialGrid);
     return initialGrid;
   }
+
   function randomizeGrid() {
     setGrid(updateRandomGrid());
   }

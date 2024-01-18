@@ -1,13 +1,9 @@
 import { create } from "zustand";
 
 type GridStore = {
-  // const [numRow, setNumRow] = useState(30);
   numRow: number;
-  // const [numCol, setNumCol] = useState(30);
   numCol: number;
-  // const [boxSize, setBoxSize] = useState(20);
   boxSize: number;
-  // const [generationTime, setTime] = useState<number>(750);
   generationTime: number;
   generations: number;
   setNumRow: (numRow: number) => void;
@@ -19,13 +15,13 @@ type GridStore = {
 };
 
 export const useGridStore = create<GridStore>((set) => ({
-  numRow: 30,
+  numRow: 25,
   setNumRow: (numRow: number) => set({ numRow }),
-  numCol: 30,
+  numCol: 25,
   setNumCol: (numCol: number) => set({ numCol }),
   boxSize: 20,
   setBoxSize: (boxSize: number) => set({ boxSize }),
-  generationTime: 750,
+  generationTime: 500,
   setGenerationTime: (generationTime: number) => set({ generationTime }),
   generations: 0,
   setGenerations: (generations: number) => set({ generations }),
