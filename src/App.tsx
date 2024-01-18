@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useGridStore } from "./store";
-import {Options} from "./components/Options";
+import { Options } from "./components/Options";
 import { MainGrid } from "./components/MainGrid";
+import { Buttons } from "./components/Buttons";
 export type GridType = number[][];
 
 export const App = () => {
@@ -16,7 +17,6 @@ export const App = () => {
   const incrementGenerations = useGridStore(
     (state) => state.incrementGenerations,
   );
-
 
   const [grid, setGrid] = useState<GridType>(() => {
     const initialGrid = Array.from({ length: numRow }, () =>
@@ -42,6 +42,9 @@ export const App = () => {
     setGenerations(0);
     setEmptyGrid(initialGrid);
     return initialGrid;
+  }
+  function randomizeGrid() {
+    setGrid(updateRandomGrid());
   }
 
   function resetGame() {
@@ -130,36 +133,13 @@ export const App = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center">
-        <button
-          onClick={() => resetGame()}
-          className="text-2xl bg-blue-500 m-5 p-5 text-white"
-        >
-          RESET
-        </button>
-
-        <button
-          onClick={() => setGrid(updateRandomGrid())}
-          className="text-2xl bg-blue-500 m-5 p-5 text-white"
-        >
-          RANDOMIZE GRID
-        </button>
-
-        <button
-          onClick={() => handleStartButtonClick()}
-          className="text-2xl bg-red-500 m-5 p-5 text-white"
-        >
-          ENDLESS MODE
-        </button>
-
-        <button
-          onClick={() => calculateNextGeneration()}
-          className="text-2xl bg-red-500 m-5 p-5 text-white"
-        >
-          NEXT GENERATION
-        </button>
-      </div>
-      <Options/>
+      <Buttons
+        resetGame={resetGame}
+        handleStartButtonClick={handleStartButtonClick}
+        calculateNextGeneration={calculateNextGeneration}
+        randomizeGrid={randomizeGrid}
+      />
+      <Options />
       <p className="text-2xl text-center">Generations: {generations}</p>
       <MainGrid grid={grid} updateCellValue={updateCellValue} />
     </>
