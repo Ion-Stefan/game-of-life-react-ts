@@ -1,6 +1,6 @@
 # https://ion-stefan.github.io/game-of-life-react-ts/
 
-Welcome to the React Conway's Game of Life project! This project is a recreation of Conway's Game of Life, a classic cellular automaton, using React with TypeScript and styled with Tailwind CSS. The Game of Life is a zero-player game, meaning its evolution is determined by its initial state, with no further input from humans.
+Welcome to the React Conway's Game of Life project! This project is a recreation of Conway's Game of Life, a classic cellular automaton, using React with TypeScript ,styled with Tailwind CSS and initialized using Vite. The Game of Life is a zero-player game, meaning its evolution is determined by its initial state, with no further input from humans.
 
 
 Prerequisites: make sure you have Node.js and npm installed on your machine.
