@@ -1,3 +1,4 @@
+import { Button } from "./Button";
 interface Props {
   resetGame(): void;
   randomizeGrid(): void;
@@ -12,34 +13,20 @@ export const Buttons = ({
   calculateNextGeneration,
 }: Props) => {
   return (
-    <div className="flex items-center justify-center">
-      <button
-        onClick={() => resetGame()}
-        className="text-2xl bg-blue-500 m-5 p-5 text-white"
-      >
-        RESET
-      </button>
+    <div className="pt-2 flex items-center justify-center">
+      <Button buttonFunction={resetGame} buttonText={"Reset Game"} />
 
-      <button
-        onClick={() => randomizeGrid()}
-        className="text-2xl bg-blue-500 m-5 p-5 text-white"
-      >
-        RANDOMIZE GRID
-      </button>
+      <Button buttonFunction={randomizeGrid} buttonText={"Randomize Game"} />
 
-      <button
-        onClick={() => handleStartButtonClick()}
-        className="text-2xl bg-red-500 m-5 p-5 text-white"
-      >
-        ENDLESS MODE
-      </button>
+      <Button
+        buttonFunction={handleStartButtonClick}
+        buttonText={"Endless Game Mode"}
+      />
 
-      <button
-        onClick={() => calculateNextGeneration()}
-        className="text-2xl bg-red-500 m-5 p-5 text-white"
-      >
-        NEXT GENERATION
-      </button>
+      <Button
+        buttonFunction={calculateNextGeneration}
+        buttonText={"View Next Generation"}
+      />
     </div>
   );
 };

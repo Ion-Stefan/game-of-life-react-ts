@@ -134,13 +134,13 @@ export const App = () => {
 
   return (
     <>
+      <Options />
       <Buttons
         resetGame={resetGame}
         handleStartButtonClick={handleStartButtonClick}
         calculateNextGeneration={calculateNextGeneration}
         randomizeGrid={randomizeGrid}
       />
-      <Options />
       <p className="text-2xl text-center">Generations: {generations}</p>
       <MainGrid grid={grid} updateCellValue={updateCellValue} />
     </>

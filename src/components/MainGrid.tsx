@@ -12,7 +12,7 @@ const selectedClass =
 export const MainGrid = ({ grid, updateCellValue }: Props) => {
   const boxSize: number = useGridStore((state) => state.boxSize);
   return (
-    <div className=" flex justify-center items-start py-10">
+    <div className="min-h-[90vh] flex justify-center items-center py-10">
       {/* Display the grid using the map function */}
       {grid.map((row, rowIndex) => (
         <div key={rowIndex} className="">
