@@ -6,6 +6,7 @@ type GridStore = {
   boxSize: number;
   generationTime: number;
   generations: number;
+  boxBorder: boolean;
   setNumRow: (numRow: number) => void;
   setNumCol: (numCol: number) => void;
   setBoxSize: (boxSize: number) => void;
@@ -27,4 +28,6 @@ export const useGridStore = create<GridStore>((set) => ({
   setGenerations: (generations: number) => set({ generations }),
   incrementGenerations: () =>
     set((state) => ({ generations: state.generations + 1 })),
+  boxBorder: true,
+  toggleBoxBorder: () => set((state) => ({ boxBorder: !state.boxBorder })),
 }));

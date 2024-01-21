@@ -58,6 +58,7 @@ export const Options = () => {
   const setNumCol = useGridStore((state) => state.setNumCol);
   const setBoxSize = useGridStore((state) => state.setBoxSize);
   const setGenerationTime = useGridStore((state) => state.setGenerationTime);
+  const toggleBoxBorder = useGridStore((state) => state.toggleBoxBorder);
   return (
     <Menu
       pageWrapId="page-wrap"
@@ -82,7 +83,7 @@ export const Options = () => {
         <p className="text-2xl font-bold text-gray-900 mb-2">Columns:</p>
         <input
           className="border-2 mb-4 border-black rounded-lg "
-          name="boxSize"
+          name="columns"
           type="number"
           value={numRow}
           onChange={({ target }) => setNumRow(Number(target.value))}
@@ -93,7 +94,7 @@ export const Options = () => {
         <p className="text-2xl font-bold text-gray-900 mb-2">Rows:</p>
         <input
           className="border-2 mb-4 border-black rounded-lg "
-          name="boxSize"
+          name="rows"
           type="number"
           value={numCol}
           onChange={({ target }) => setNumCol(Number(target.value))}
@@ -106,12 +107,20 @@ export const Options = () => {
         </p>
         <input
           className="border-2 mb-4 border-black rounded-lg "
-          name="boxSize"
+          name="generationTime"
           type="number"
           value={generationTime}
           onChange={({ target }) => setGenerationTime(Number(target.value))}
         />
       </div>
+
+      <p className="text-2xl font-bold text-gray-900 mb-2">Hide border:</p>
+      <input
+        name="showBorder"
+        type="checkbox"
+        className="h-8 w-8 align-sub ml-4"
+        onChange={({ target }) => toggleBoxBorder()}
+      />
     </Menu>
   );
 };

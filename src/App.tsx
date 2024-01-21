@@ -141,8 +141,17 @@ export const App = () => {
         calculateNextGeneration={calculateNextGeneration}
         randomizeGrid={randomizeGrid}
       />
-      <p className="text-2xl text-center">Generations: {generations}</p>
-      <MainGrid grid={grid} updateCellValue={updateCellValue} />
+      <p className="text-sm text-center text-gray-500">
+        Click 'randomize game' or start clicking individual cells
+      </p>
+      <p className="text-sm text-center text-gray-500">
+        Play around with the parameters from the top-left menu
+      </p>
+      <MainGrid
+        grid={grid}
+        generations={generations}
+        updateCellValue={updateCellValue}
+      />
     </>
   );
 };
