@@ -119,7 +119,7 @@ export const Options = () => {
         name="showBorder"
         type="checkbox"
         className="h-8 w-8 align-sub ml-4"
-        onChange={({ target }) => toggleBoxBorder()}
+        onChange={() => toggleBoxBorder()}
       />
     </Menu>
   );
